@@ -1,4 +1,4 @@
-from Lesson1.Homework1.simple_math import SimpleMath
+from simple_math import SimpleMath
 import pytest
 
 @pytest.fixture
