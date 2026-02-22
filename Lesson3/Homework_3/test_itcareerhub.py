@@ -8,7 +8,6 @@ import pytest
 def driver():
     driver = webdriver.Chrome()
     driver.maximize_window()
-    # driver.set_window_size(1920, 1080)
     driver.get("https://itcareerhub.de/ru")
     yield driver
     driver.quit()
