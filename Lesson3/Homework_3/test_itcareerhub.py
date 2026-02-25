@@ -20,54 +20,59 @@ def test_logo_is_displayed(driver):
 
 
 def test_program_section(driver):
-    program_links = driver.find_elements(By.CSS_SELECTOR, "a.tn-atom.t794__tm-link")
+    program = driver.find_element(By.LINK_TEXT, "Программы")
 
-    assert any(p.is_displayed() for p in program_links)
+    assert program.is_displayed()
 
 
 def test_payment_section(driver):
-    payment_links = driver.find_elements(By.CSS_SELECTOR, "a[href='#rec1921734713']")
+    payment = driver.find_element(By.LINK_TEXT, "Способы оплаты")
 
-    assert any(p.is_displayed() for p in payment_links)
+    assert payment.is_displayed()
 
 
 def test_about_us_section(driver):
-    about_us_links = driver.find_elements(By.CSS_SELECTOR, "a[href='/ru/o-nas']")
+    about_us = driver.find_element(By.LINK_TEXT, "О нас")
 
-    assert any(a.is_displayed() for a in about_us_links)
+    assert about_us.is_displayed()
 
 
 def test_reviews_section(driver):
-    review_links = driver.find_elements(By.CSS_SELECTOR, ".t396__elem a[href='/reviews']")
+    reviews = driver.find_element(By.LINK_TEXT, "Отзывы")
 
-    assert any(r.is_displayed() for r in review_links)
+    assert reviews.is_displayed()
 
 
 def test_language_section(driver):
-    ru = driver.find_elements(By.CSS_SELECTOR, "a[href='/ru']")
-    de = driver.find_elements(By.CSS_SELECTOR, "a[href='/']")
+    ru = driver.find_element(By.LINK_TEXT, "ru")
+    de = driver.find_element(By.LINK_TEXT, "de")
 
-    assert any(r.is_displayed() and r.text.strip().lower() == "ru" for r in ru)
-    assert any(d.is_displayed() and d.text.strip().lower() == "de" for d in de)
+    assert ru.is_displayed()
+    assert de.is_displayed()
+
+    de.click()
+    sleep(3)
+    assert "/ru" not in driver.current_url
+
+    ru = driver.find_element(By.LINK_TEXT, "ru")
+    ru.click()
+    sleep(3)
+    assert "/ru" in driver.current_url
 
 
 def test_phone_button(driver):
     driver.get("https://itcareerhub.de/reviews")
 
+    sleep(3)
+
+    phone_icon = driver.find_element(By.CSS_SELECTOR, "a[href='#popup:form-tr3'] img")
+
+    assert phone_icon.is_displayed()
+    phone_icon.click()
+
     sleep(5)
 
-    phone_icons = driver.find_elements(By.CSS_SELECTOR, "a[href='#popup:form-tr3'] img")
-    for icon in phone_icons:
-        if icon.is_displayed():
-            icon.click()
-            break
+    popup_text = driver.find_element(By.CSS_SELECTOR, ".t396__elem.tn-elem.tn-elem__13803069911711363912027")
 
-    sleep(5)
-
-    texts = driver.find_elements(By.CSS_SELECTOR, "div.tn-atom[field='tn_text_1711363912027']")
-
-    assert any(
-        t.is_displayed() and
-        "Если вы не дозвонились, заполните форму на сайте. Мы свяжемся с вами" in t.text
-        for t in texts
-    )
+    assert popup_text.is_displayed()
+    assert "Если вы не дозвонились, заполните форму на сайте. Мы свяжемся с вами" in popup_text.text
